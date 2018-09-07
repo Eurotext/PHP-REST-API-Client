@@ -1,0 +1,12 @@
+{
+    "name": "eurotext/rest-api-client",
+    "type": "library",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Matthias Walter",
+            "email": "matthias.walter@mwltr.de"
+        }
+    ],
+    "require": {}
+}
