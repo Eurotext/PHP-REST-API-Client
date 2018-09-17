@@ -16,17 +16,35 @@ class ItemGetResponse extends AbstractResponse
     /** @var ItemData */
     private $itemData;
 
+    /** @var ItemData */
+    private $originItemData;
+
+    public function setData(array $data)
+    {
+        $this->itemData = $this->initItemData($data);
+    }
+
+    public function setOrigin(array $origin)
+    {
+        $this->originItemData = $this->initItemData($origin);
+    }
+
     public function getItemData(): ItemData
     {
         return $this->itemData;
     }
 
-    public function setData(array $data)
+    public function getOriginItemData(): ItemData
+    {
+        return $this->originItemData;
+    }
+
+    private function initItemData(array $data): ItemData
     {
         $meta = $data['__meta'];
         unset($data['__meta']);
 
-        $this->itemData = new ItemData($data, $meta);
+        return new ItemData($data, $meta);
     }
 
 }

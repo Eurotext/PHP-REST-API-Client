@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace Eurotext\RestApiClient\Api\Project;
 
 use Eurotext\RestApiClient\Api\AbstractV1Api;
-use Eurotext\RestApiClient\Request\Project\ItemPostRequest;
 use Eurotext\RestApiClient\Request\Project\ItemGetRequest;
+use Eurotext\RestApiClient\Request\Project\ItemPostRequest;
 use Eurotext\RestApiClient\Response\Project\ItemGetResponse;
 use Eurotext\RestApiClient\Response\Project\ItemPostResponse;
 
@@ -52,10 +52,14 @@ class ItemV1Api extends AbstractV1Api implements ItemV1ApiInterface
      */
     public function get(ItemGetRequest $request): ItemGetResponse
     {
-        $projectId = $request->getProjectId();
-        $itemId    = $request->getItemId();
+        $projectId  = $request->getProjectId();
+        $itemId     = $request->getItemId();
+        $withOrigin = $request->getWithOrigin();
 
-        $httpPath    = "/api/v1/project/$projectId/item/$itemId.json";
+        $httpPath = "/api/v1/project/$projectId/item/$itemId.json";
+        if ($withOrigin === 1) {
+            $httpPath .= '?withOrigin=1';
+        }
         $httpHeaders = $request->getHeaders();
 
         $response = $this->sendRequestAndHandleResponse(
