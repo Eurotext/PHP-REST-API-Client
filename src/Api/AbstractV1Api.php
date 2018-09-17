@@ -134,6 +134,23 @@ abstract class AbstractV1Api
         return $this->requestFactory->createGetRequest($uri, $httpHeaders);
     }
 
+    protected function createHttpPatchRequest(string $path, array $headers = [], string $httpBody = null): Request
+    {
+        $uri = $this->config->getHost() . $path;
+
+        $httpHeaders = [
+            'Content-Type' => 'application/json',
+            'User-Agent'   => $this->config->getUserAgent(),
+            'apikey'       => $this->config->getApiKey(),
+        ];
+
+        if (!empty($headers)) {
+            $httpHeaders = array_merge($httpHeaders, $headers);
+        }
+
+        return $this->requestFactory->createPatchRequest($uri, $httpHeaders, $httpBody);
+    }
+
     /**
      * Create http client option
      *

@@ -7,8 +7,9 @@ use GuzzleHttp\Psr7\Request;
 
 class RequestFactory
 {
-    const METHOD_POST = 'POST';
-    const METHOD_GET  = 'GET';
+    const METHOD_POST  = 'POST';
+    const METHOD_GET   = 'GET';
+    const METHOD_PATCH = 'PATCH';
 
     public function createPostRequest(
         string $uri,
@@ -23,4 +24,14 @@ class RequestFactory
     {
         return new Request(self::METHOD_GET, $uri, $headers, '', $version);
     }
+
+    public function createPatchRequest(
+        string $uri,
+        array $headers = [],
+        string $body = null,
+        string $version = '1.1'
+    ): Request {
+        return new Request(self::METHOD_PATCH, $uri, $headers, $body, $version);
+    }
+
 }
