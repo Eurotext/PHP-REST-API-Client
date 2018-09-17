@@ -11,7 +11,7 @@ namespace Eurotext\RestApiClient\Api;
 use Eurotext\RestApiClient\Enum\ProjectTypeEnum;
 use Eurotext\RestApiClient\Exception\DeserializationFailedException;
 use Eurotext\RestApiClient\Request\Data\ProjectData;
-use Eurotext\RestApiClient\Request\ProjectDataRequest;
+use Eurotext\RestApiClient\Request\ProjectPostRequest;
 use GuzzleHttp\Exception\GuzzleException;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
@@ -39,14 +39,14 @@ class ProjectV1ApiTest extends TestCase
     }
 
     /**
-     * @throws \Eurotext\RestApiClient\Exception\DeserializationFailedException
-     * @throws \Eurotext\RestApiClient\Exception\ApiClientException
+     * @throws DeserializationFailedException
+     * @throws GuzzleException
      */
     public function testItShouldSendProjectPost()
     {
         $projectData = new ProjectData('Unit Test');
 
-        $request = new ProjectDataRequest('', $projectData, ProjectTypeEnum::QUOTE());
+        $request = new ProjectPostRequest('', $projectData, ProjectTypeEnum::QUOTE());
 
         $responseStatus  = 200;
         $responseHeaders = [];
@@ -62,11 +62,11 @@ class ProjectV1ApiTest extends TestCase
     }
 
     /**
-     * @throws ApiClientException
+     * @throws GuzzleException
      */
     public function testItShouldCaptureExceptionsDuringResponseDeserialization()
     {
-        $request = new ProjectDataRequest('', new ProjectData(''));
+        $request = new ProjectPostRequest('', new ProjectData(''));
 
         $responseStatus  = 200;
         $responseHeaders = [];
@@ -98,12 +98,12 @@ class ProjectV1ApiTest extends TestCase
     }
 
     /**
-     * @throws ApiClientException
      * @throws DeserializationFailedException
+     * @throws GuzzleException
      */
     public function testItShouldInitializeEmptyResponseObject()
     {
-        $request = new ProjectDataRequest('', new ProjectData(''));
+        $request = new ProjectPostRequest('', new ProjectData(''));
 
         $responseStatus  = 200;
         $responseHeaders = [];

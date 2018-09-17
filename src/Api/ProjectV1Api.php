@@ -8,13 +8,13 @@ declare(strict_types=1);
 
 namespace Eurotext\RestApiClient\Api;
 
-use Eurotext\RestApiClient\Request\ProjectDataRequest;
+use Eurotext\RestApiClient\Request\ProjectPostRequest;
 use Eurotext\RestApiClient\Response\ProjectGetResponse;
 use Eurotext\RestApiClient\Response\ProjectPostResponse;
 
 class ProjectV1Api extends AbstractV1Api implements ProjectV1ApiInterface
 {
-    public function post(ProjectDataRequest $request): ProjectPostResponse
+    public function post(ProjectPostRequest $request): ProjectPostResponse
     {
         $httpPath    = '/api/v1/project.json';
         $httpHeaders = $request->getHeaders();
