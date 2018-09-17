@@ -14,7 +14,7 @@ use Eurotext\RestApiClient\Configuration;
 use Eurotext\RestApiClient\Enum\ProjectTypeEnum;
 use Eurotext\RestApiClient\Request\Data\Project\ItemData;
 use Eurotext\RestApiClient\Request\Data\ProjectData;
-use Eurotext\RestApiClient\Request\Project\ItemDataRequest;
+use Eurotext\RestApiClient\Request\Project\ItemPostRequest;
 use Eurotext\RestApiClient\Request\Project\ItemGetRequest;
 use Eurotext\RestApiClient\Request\ProjectDataRequest;
 use PHPUnit\Framework\TestCase;
@@ -69,7 +69,7 @@ class ProjectV1ApiIntegrationTest extends TestCase
      */
     public function testItShouldCreateItem(int $projectId)
     {
-        $itemRequest = new ItemDataRequest(
+        $itemRequest = new ItemPostRequest(
             $projectId,
             'en-us',
             'de-de',

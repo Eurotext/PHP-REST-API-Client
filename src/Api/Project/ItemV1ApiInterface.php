@@ -7,7 +7,7 @@
 
 namespace Eurotext\RestApiClient\Api\Project;
 
-use Eurotext\RestApiClient\Request\Project\ItemDataRequest;
+use Eurotext\RestApiClient\Request\Project\ItemPostRequest;
 use Eurotext\RestApiClient\Request\Project\ItemGetRequest;
 use Eurotext\RestApiClient\Response\Project\ItemGetResponse;
 use Eurotext\RestApiClient\Response\Project\ItemPostResponse;
@@ -17,7 +17,7 @@ interface ItemV1ApiInterface
     /**
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function post(ItemDataRequest $request): ItemPostResponse;
+    public function post(ItemPostRequest $request): ItemPostResponse;
 
     /**
      * @throws \GuzzleHttp\Exception\GuzzleException
