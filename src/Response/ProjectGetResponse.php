@@ -8,12 +8,14 @@ declare(strict_types=1);
 
 namespace Eurotext\RestApiClient\Response;
 
+use Eurotext\RestApiClient\Request\Data\Project\ItemData;
+
 class ProjectGetResponse extends AbstractResponse
 {
     /** @var string */
     private $description;
 
-    /** @var mixed[] */
+    /** @var ItemData[] */
     private $items;
 
     /** @var mixed[] */
@@ -35,7 +37,7 @@ class ProjectGetResponse extends AbstractResponse
     }
 
     /**
-     * @return mixed[]
+     * @return ItemData[]
      */
     public function getItems(): array
     {
