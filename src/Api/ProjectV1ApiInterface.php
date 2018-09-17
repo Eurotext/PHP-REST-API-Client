@@ -25,7 +25,18 @@ interface ProjectV1ApiInterface
     public function post(ProjectDataRequest $request): ProjectPostResponse;
 
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @param int $projectId
+     *
+     * @return ProjectGetResponse
      */
     public function get(int $projectId): ProjectGetResponse;
+
+    /**
+     * @deprecated ONLY AVAILABLE IN SANDBOX, to simulate translated project
+     *
+     * @param int $projectId
+     *
+     * @return \stdClass
+     */
+    public function translate(int $projectId): \stdClass;
 }

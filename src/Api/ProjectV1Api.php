@@ -50,4 +50,29 @@ class ProjectV1Api extends AbstractV1Api implements ProjectV1ApiInterface
         return $response;
     }
 
+    /**
+     * @param int $projectId
+     *
+     * @return \stdClass
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @deprecated ONLY AVAILABLE IN SANDBOX, to simulate translated project
+     */
+    public function translate(int $projectId): \stdClass
+    {
+        $httpPath    = "/api/v1/project/translate/$projectId.json";
+        $httpHeaders = ['X-Translate' => 1];
+
+        $httpResponse = $this->client->send(
+            $this->createHttpPatchRequest($httpPath, $httpHeaders),
+            $this->createHttpClientOptions()
+        );
+
+        // Handle Response: Deserzialize Response JSON to PHP Object
+        $responseContent = $httpResponse->getBody()->getContents();
+
+        $response = \json_decode($responseContent);
+
+        /** @var \stdClass $response */
+        return $response;
+    }
 }
