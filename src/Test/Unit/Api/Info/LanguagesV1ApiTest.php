@@ -42,13 +42,13 @@ class LanguagesV1ApiTest extends TestCase
         $this->assertCount(6, $response->getLanguages());
     }
 
-    public function testThrowsExceptionOnDeserializeError()
+    public function _testThrowsExceptionOnDeserializeError()
     {
-
+        // @todo implement
     }
 
-    public function testThrowsExceptionOnRequestError()
+    public function _testThrowsExceptionOnRequestError()
     {
-
+        // @todo implement
     }
 }
