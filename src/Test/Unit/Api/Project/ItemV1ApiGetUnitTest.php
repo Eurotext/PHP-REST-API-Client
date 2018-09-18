@@ -112,7 +112,7 @@ class ItemV1ApiGetUnitTest extends TestCase
         $this->assertEquals('Crown Summit Backpack', $originItemData->getDataValue('name'));
     }
 
-    private function mockRequestFactory($url): void
+    private function mockRequestFactory($url)
     {
         $request = (new RequestFactory())->createGetRequest($url);
         $this->requestFactory->expects($this->once())->method('createGetRequest')
