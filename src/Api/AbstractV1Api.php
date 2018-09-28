@@ -103,7 +103,7 @@ abstract class AbstractV1Api
 
     protected function createHttpPostRequest(string $path, array $headers = [], string $httpBody = null): Request
     {
-        $uri = $this->config->getHost() . $path;
+        $uri = rtrim($this->config->getHost(), '/') . $path;
 
         $httpHeaders = [
             'Content-Type' => 'application/json',
