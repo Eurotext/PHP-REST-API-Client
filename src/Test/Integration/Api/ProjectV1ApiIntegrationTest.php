@@ -11,12 +11,15 @@ namespace Eurotext\RestApiClient\Test\Integration\Api;
 use Eurotext\RestApiClient\Api\Project\ItemV1Api;
 use Eurotext\RestApiClient\Api\ProjectV1Api;
 use Eurotext\RestApiClient\Configuration;
+use Eurotext\RestApiClient\Enum\ProjectStatusEnum;
 use Eurotext\RestApiClient\Enum\ProjectTypeEnum;
 use Eurotext\RestApiClient\Request\Data\Project\ItemData;
 use Eurotext\RestApiClient\Request\Data\ProjectData;
-use Eurotext\RestApiClient\Request\Project\ItemPostRequest;
 use Eurotext\RestApiClient\Request\Project\ItemGetRequest;
+use Eurotext\RestApiClient\Request\Project\ItemPostRequest;
 use Eurotext\RestApiClient\Request\ProjectPostRequest;
+use Eurotext\RestApiClient\Request\ProjectTransitionRequest;
+use Eurotext\RestApiClient\Response\ProjectTransitionResponse;
 use PHPUnit\Framework\TestCase;
 
 class ProjectV1ApiIntegrationTest extends TestCase
@@ -91,6 +94,24 @@ class ProjectV1ApiIntegrationTest extends TestCase
 
     /**
      * @depends testItShouldCreateProject
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testItShouldTransitionProjectStatus(int $projectId)
+    {
+        $request = new ProjectTransitionRequest($projectId, ProjectStatusEnum::NEW());
+
+        $response = $this->projectV1Api->transition($request);
+
+        $this->assertInstanceOf(ProjectTransitionResponse::class, $response);
+
+        $httpResponse = $response->getHttpResponse();
+        $this->assertEquals(204, $httpResponse->getStatusCode());
+
+        return $projectId;
+    }
+
+    /**
+     * @depends testItShouldCreateProject
      */
     public function testItShouldTriggerTranslateInSandbox(int $projectId)
     {
@@ -111,7 +132,7 @@ class ProjectV1ApiIntegrationTest extends TestCase
         $expectedItem = [
             'description' => self::DESCRIPTION_TRANSLATED,
             '__meta'      => $this->metaData,
-            'status'      => '',
+            'status'      => 'new',
         ];
 
         $this->assertSame($response->getDescription(), self::PROJECT_DESCRIPTION);

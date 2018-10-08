@@ -9,8 +9,10 @@ namespace Eurotext\RestApiClient\Api;
 
 use Eurotext\RestApiClient\Exception\DeserializationFailedException;
 use Eurotext\RestApiClient\Request\ProjectPostRequest;
+use Eurotext\RestApiClient\Request\ProjectTransitionRequest;
 use Eurotext\RestApiClient\Response\ProjectGetResponse;
 use Eurotext\RestApiClient\Response\ProjectPostResponse;
+use Eurotext\RestApiClient\Response\ProjectTransitionResponse;
 
 interface ProjectV1ApiInterface
 {
@@ -22,6 +24,14 @@ interface ProjectV1ApiInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function post(ProjectPostRequest $request): ProjectPostResponse;
+
+    /**
+     * @param ProjectTransitionRequest $request
+     *
+     * @return ProjectTransitionResponse
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function transition(ProjectTransitionRequest $request): ProjectTransitionResponse;
 
     /**
      * @param int $projectId

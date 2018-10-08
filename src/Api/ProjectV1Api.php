@@ -9,8 +9,10 @@ declare(strict_types=1);
 namespace Eurotext\RestApiClient\Api;
 
 use Eurotext\RestApiClient\Request\ProjectPostRequest;
+use Eurotext\RestApiClient\Request\ProjectTransitionRequest;
 use Eurotext\RestApiClient\Response\ProjectGetResponse;
 use Eurotext\RestApiClient\Response\ProjectPostResponse;
+use Eurotext\RestApiClient\Response\ProjectTransitionResponse;
 
 class ProjectV1Api extends AbstractV1Api implements ProjectV1ApiInterface
 {
@@ -47,6 +49,29 @@ class ProjectV1Api extends AbstractV1Api implements ProjectV1ApiInterface
         );
 
         /** @var ProjectGetResponse $response */
+        return $response;
+    }
+
+    /**
+     * @param ProjectTransitionRequest $request
+     *
+     * @return ProjectTransitionResponse
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function transition(ProjectTransitionRequest $request): ProjectTransitionResponse
+    {
+        $projectId = $request->getProjectId();
+
+        $httpPath    = "/api/v1/transition/project/$projectId.json";
+        $httpHeaders = $request->getHeaders();
+
+        $response = $this->sendRequestAndHandleResponse(
+            $this->createHttpPatchRequest($httpPath, $httpHeaders),
+            $this->createHttpClientOptions(),
+            ProjectTransitionResponse::class
+        );
+
+        /** @var ProjectTransitionResponse $response */
         return $response;
     }
 

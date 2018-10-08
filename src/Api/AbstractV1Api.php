@@ -12,7 +12,6 @@ use Eurotext\RestApiClient\Configuration;
 use Eurotext\RestApiClient\ConfigurationInterface;
 use Eurotext\RestApiClient\Exception\DeserializationFailedException;
 use Eurotext\RestApiClient\Http\RequestFactory;
-use Eurotext\RestApiClient\Response\ProjectPostResponse;
 use Eurotext\RestApiClient\Response\ResponseInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
@@ -72,15 +71,13 @@ abstract class AbstractV1Api
         $httpResponse = $this->client->send($httpRequest, $httpOptions);
 
         // Handle Response: Deserzialize Response JSON to PHP Object
+        $response = null;
         try {
             $responseContent = $httpResponse->getBody()->getContents();
 
-            /** @var ProjectPostResponse $response */
-            $response = $this->serializer->deserialize(
-                $responseContent,
-                $responseClass,
-                'json'
-            );
+            if (!empty($responseContent)) {
+                $response = $this->serializer->deserialize($responseContent, $responseClass, 'json');
+            }
         } catch (\Exception $e) {
             throw new DeserializationFailedException(
                 $httpRequest,
@@ -98,6 +95,7 @@ abstract class AbstractV1Api
         $response->setHttpRequest($httpRequest);
         $response->setHttpResponse($httpResponse);
 
+        /** @var ResponseInterface $response */
         return $response;
     }
 
