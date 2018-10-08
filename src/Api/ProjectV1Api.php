@@ -10,9 +10,11 @@ namespace Eurotext\RestApiClient\Api;
 
 use Eurotext\RestApiClient\Request\ProjectPostRequest;
 use Eurotext\RestApiClient\Request\ProjectTransitionRequest;
+use Eurotext\RestApiClient\Request\ProjectTranslateRequest;
 use Eurotext\RestApiClient\Response\ProjectGetResponse;
 use Eurotext\RestApiClient\Response\ProjectPostResponse;
 use Eurotext\RestApiClient\Response\ProjectTransitionResponse;
+use Eurotext\RestApiClient\Response\ProjectTranslateResponse;
 
 class ProjectV1Api extends AbstractV1Api implements ProjectV1ApiInterface
 {
@@ -61,8 +63,8 @@ class ProjectV1Api extends AbstractV1Api implements ProjectV1ApiInterface
     public function transition(ProjectTransitionRequest $request): ProjectTransitionResponse
     {
         $projectId = $request->getProjectId();
+        $httpPath  = "/api/v1/transition/project/$projectId.json";
 
-        $httpPath    = "/api/v1/transition/project/$projectId.json";
         $httpHeaders = $request->getHeaders();
 
         $response = $this->sendRequestAndHandleResponse(
@@ -76,28 +78,26 @@ class ProjectV1Api extends AbstractV1Api implements ProjectV1ApiInterface
     }
 
     /**
-     * @param int $projectId
+     * @param ProjectTranslateRequest $request
      *
-     * @return \stdClass
+     * @return ProjectTranslateResponse
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @deprecated ONLY AVAILABLE IN SANDBOX, to simulate translated project
      */
-    public function translate(int $projectId): \stdClass
+    public function translate(ProjectTranslateRequest $request): ProjectTranslateResponse
     {
-        $httpPath    = "/api/v1/project/translate/$projectId.json";
-        $httpHeaders = ['X-Translate' => 1];
+        $projectId = $request->getProjectId();
+        $httpPath  = "/api/v1/project/translate/$projectId.json";
 
-        $httpResponse = $this->client->send(
+        $httpHeaders = $request->getHeaders();
+
+        $response = $this->sendRequestAndHandleResponse(
             $this->createHttpPatchRequest($httpPath, $httpHeaders),
-            $this->createHttpClientOptions()
+            $this->createHttpClientOptions(),
+            ProjectTranslateResponse::class
         );
 
-        // Handle Response: Deserzialize Response JSON to PHP Object
-        $responseContent = $httpResponse->getBody()->getContents();
-
-        $response = \json_decode($responseContent);
-
-        /** @var \stdClass $response */
+        /** @var ProjectTranslateResponse $response */
         return $response;
     }
 }

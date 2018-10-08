@@ -19,6 +19,7 @@ use Eurotext\RestApiClient\Request\Project\ItemGetRequest;
 use Eurotext\RestApiClient\Request\Project\ItemPostRequest;
 use Eurotext\RestApiClient\Request\ProjectPostRequest;
 use Eurotext\RestApiClient\Request\ProjectTransitionRequest;
+use Eurotext\RestApiClient\Request\ProjectTranslateRequest;
 use Eurotext\RestApiClient\Response\ProjectTransitionResponse;
 use PHPUnit\Framework\TestCase;
 
@@ -115,10 +116,12 @@ class ProjectV1ApiIntegrationTest extends TestCase
      */
     public function testItShouldTriggerTranslateInSandbox(int $projectId)
     {
-        $result = $this->projectV1Api->translate($projectId);
+        $request = new ProjectTranslateRequest($projectId);
 
-        $this->assertGreaterThan(0, $result->id);
-        $this->assertEquals($projectId, $result->id);
+        $result = $this->projectV1Api->translate($request);
+
+        $this->assertGreaterThan(0, $result->getId());
+        $this->assertEquals($projectId, $result->getId());
     }
 
     /**

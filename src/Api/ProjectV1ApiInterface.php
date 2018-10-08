@@ -10,9 +10,11 @@ namespace Eurotext\RestApiClient\Api;
 use Eurotext\RestApiClient\Exception\DeserializationFailedException;
 use Eurotext\RestApiClient\Request\ProjectPostRequest;
 use Eurotext\RestApiClient\Request\ProjectTransitionRequest;
+use Eurotext\RestApiClient\Request\ProjectTranslateRequest;
 use Eurotext\RestApiClient\Response\ProjectGetResponse;
 use Eurotext\RestApiClient\Response\ProjectPostResponse;
 use Eurotext\RestApiClient\Response\ProjectTransitionResponse;
+use Eurotext\RestApiClient\Response\ProjectTranslateResponse;
 
 interface ProjectV1ApiInterface
 {
@@ -43,9 +45,9 @@ interface ProjectV1ApiInterface
     /**
      * @deprecated ONLY AVAILABLE IN SANDBOX, to simulate translated project
      *
-     * @param int $projectId
+     * @param ProjectTranslateRequest $request
      *
-     * @return \stdClass
+     * @return ProjectTranslateResponse
      */
-    public function translate(int $projectId): \stdClass;
+    public function translate(ProjectTranslateRequest $request): ProjectTranslateResponse;
 }
