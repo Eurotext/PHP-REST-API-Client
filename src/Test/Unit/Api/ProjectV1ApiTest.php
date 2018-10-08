@@ -8,10 +8,13 @@ declare(strict_types=1);
 
 namespace Eurotext\RestApiClient\Api;
 
+use Eurotext\RestApiClient\Enum\ProjectStatusEnum;
 use Eurotext\RestApiClient\Enum\ProjectTypeEnum;
 use Eurotext\RestApiClient\Exception\DeserializationFailedException;
 use Eurotext\RestApiClient\Request\Data\ProjectData;
 use Eurotext\RestApiClient\Request\ProjectPostRequest;
+use Eurotext\RestApiClient\Request\ProjectTransitionRequest;
+use Eurotext\RestApiClient\Response\ProjectTransitionResponse;
 use GuzzleHttp\Exception\GuzzleException;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
@@ -123,6 +126,30 @@ class ProjectV1ApiTest extends TestCase
         $api = new ProjectV1Api(null, $this->client, $serializer);
 
         $api->post($request);
+    }
+
+    /**
+     * @throws GuzzleException
+     */
+    public function testItShouldTransitionProject()
+    {
+        $projectId = 27;
+
+        $request = new ProjectTransitionRequest($projectId, ProjectStatusEnum::NEW());
+
+        $responseStatus  = 204;
+        $responseHeaders = [];
+        $responseBody    = '';
+
+        $httpResponse = new \GuzzleHttp\Psr7\Response($responseStatus, $responseHeaders, $responseBody);
+
+        $this->client->expects($this->once())->method('send')->willReturn($httpResponse);
+
+        $response = $this->api->transition($request);
+
+        $this->assertInstanceOf(ProjectTransitionResponse::class, $response);
+
+        $this->assertEquals($httpResponse, $response->getHttpResponse());
     }
 
     public function testItShouldGetProjectDetails()
