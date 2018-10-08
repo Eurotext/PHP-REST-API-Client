@@ -31,6 +31,11 @@ class ProjectStatusEnum
         return new self(self::NEW);
     }
 
+    public static function FEEDBACK(): ProjectStatusEnum
+    {
+        return new self(self::FEEDBACK);
+    }
+
     public static function REJECTED(): ProjectStatusEnum
     {
         return new self(self::REJECTED);
@@ -39,6 +44,11 @@ class ProjectStatusEnum
     public static function APPROVED(): ProjectStatusEnum
     {
         return new self(self::APPROVED);
+    }
+
+    public static function FINISHED(): ProjectStatusEnum
+    {
+        return new self(self::FINISHED);
     }
 
     public static function ERROR(): ProjectStatusEnum
