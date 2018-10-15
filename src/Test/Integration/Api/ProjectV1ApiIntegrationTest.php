@@ -132,17 +132,11 @@ class ProjectV1ApiIntegrationTest extends TestCase
         $response = $this->projectV1Api->get($projectId);
 
         $actualItem   = $response->getItems()[1];
-        $expectedItem = [
-            'description' => self::DESCRIPTION_TRANSLATED,
-            '__meta'      => $this->metaData,
-            'status'      => 'new',
-        ];
 
         $this->assertSame($response->getDescription(), self::PROJECT_DESCRIPTION);
-        $this->assertSame(
-            $expectedItem, $actualItem,
-            "Item for project-id $projectId does not match"
-        );
+        $this->assertEquals(self::DESCRIPTION_TRANSLATED, $actualItem->getDataValue('description'));
+        $this->assertEquals('new', $actualItem->getDataValue('status'));
+        $this->assertSame($this->metaData, $actualItem->getMeta());
     }
 
     /**
