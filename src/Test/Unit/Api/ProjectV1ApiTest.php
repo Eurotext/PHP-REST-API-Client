@@ -14,6 +14,7 @@ use Eurotext\RestApiClient\Exception\DeserializationFailedException;
 use Eurotext\RestApiClient\Request\Data\ProjectData;
 use Eurotext\RestApiClient\Request\ProjectPostRequest;
 use Eurotext\RestApiClient\Request\ProjectTransitionRequest;
+use Eurotext\RestApiClient\Request\ProjectTranslateRequest;
 use Eurotext\RestApiClient\Response\ProjectTransitionResponse;
 use GuzzleHttp\Exception\GuzzleException;
 use PHPUnit\Framework\TestCase;
@@ -171,6 +172,23 @@ class ProjectV1ApiTest extends TestCase
         $this->assertArrayHasKey(2, $response->getItems());
         $this->assertArrayHasKey(3, $response->getItems());
         $this->assertSame([], $response->getFiles());
+    }
+
+    public function testItShouldSendTranslateRequest()
+    {
+        $projectId = 27;
+
+        $responseStatus  = 200;
+        $responseHeaders = [];
+        $responseBody    = sprintf('{"id":%d}', $projectId);
+
+        $httpResponse = new \GuzzleHttp\Psr7\Response($responseStatus, $responseHeaders, $responseBody);
+
+        $this->client->expects($this->once())->method('send')->willReturn($httpResponse);
+
+        $response = $this->api->translate(new ProjectTranslateRequest($projectId));
+
+        $this->assertEquals($projectId, $response->getId());
     }
 
     public function testItShouldThrowExceptionOnDeserializationError()
