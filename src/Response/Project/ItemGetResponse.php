@@ -19,6 +19,14 @@ class ItemGetResponse extends AbstractResponse
     /** @var ItemData */
     private $originItemData;
 
+    public function getItemStatus()
+    {
+        $xItemStatus = $this->getHttpResponse()->getHeader('X-Item-Status');
+        $status      = array_shift($xItemStatus);
+
+        return $status;
+    }
+
     public function setData(array $data)
     {
         $this->itemData = $this->initItemData($data);
