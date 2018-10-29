@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Eurotext\RestApiClient\Request;
 
+use Eurotext\RestApiClient\Enum\ProjectStatusEnum;
+
 class ProjectTranslateRequest implements RequestInterface
 {
     /**
@@ -16,14 +18,17 @@ class ProjectTranslateRequest implements RequestInterface
     private $projectId;
 
     /**
-     * @var int
+     * @var ProjectStatusEnum
      */
-    private $translate;
+    private $status;
 
-    public function __construct(int $projectId, int $translate = 1)
+    public function __construct(int $projectId, ProjectStatusEnum $status = null)
     {
         $this->projectId = $projectId;
-        $this->translate = $translate;
+        $this->status    = $status;
+        if ($this->status === null) {
+            $this->status = ProjectStatusEnum::FINISHED();
+        }
     }
 
     public function getProjectId(): int
@@ -31,15 +36,15 @@ class ProjectTranslateRequest implements RequestInterface
         return $this->projectId;
     }
 
-    public function getTranslate(): int
+    public function getStatus(): ProjectStatusEnum
     {
-        return $this->translate;
+        return $this->status;
     }
 
     public function getHeaders(): array
     {
         return [
-            'X-Translate' => $this->getTranslate(),
+            'X-Items-Status' => (string) $this->getStatus(),
         ];
     }
 }
