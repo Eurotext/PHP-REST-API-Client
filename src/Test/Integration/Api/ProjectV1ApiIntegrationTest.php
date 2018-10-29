@@ -11,6 +11,7 @@ namespace Eurotext\RestApiClient\Test\Integration\Api;
 use Eurotext\RestApiClient\Api\Project\ItemV1Api;
 use Eurotext\RestApiClient\Api\ProjectV1Api;
 use Eurotext\RestApiClient\Configuration;
+use Eurotext\RestApiClient\Enum\ProjectItemStatusEnum;
 use Eurotext\RestApiClient\Enum\ProjectStatusEnum;
 use Eurotext\RestApiClient\Enum\ProjectTypeEnum;
 use Eurotext\RestApiClient\Request\Data\Project\ItemData;
@@ -94,11 +95,13 @@ class ProjectV1ApiIntegrationTest extends TestCase
     }
 
     /**
-     * @depends testItShouldCreateProject
+     * @depends testItShouldCreateItem
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function testItShouldTransitionProjectStatus(int $projectId)
+    public function testItShouldTransitionProjectStatus(array $data)
     {
+        $projectId = $data['project_id'];
+
         $request = new ProjectTransitionRequest($projectId, ProjectStatusEnum::NEW());
 
         $response = $this->projectV1Api->transition($request);
@@ -108,39 +111,48 @@ class ProjectV1ApiIntegrationTest extends TestCase
         $httpResponse = $response->getHttpResponse();
         $this->assertEquals(204, $httpResponse->getStatusCode());
 
-        return $projectId;
+        return $data;
     }
 
     /**
-     * @depends testItShouldCreateProject
+     * @depends testItShouldTransitionProjectStatus
      */
-    public function testItShouldTriggerTranslateInSandbox(int $projectId)
+    public function testItShouldTriggerTranslateInSandbox(array $data)
     {
+        $projectId = $data['project_id'];
+
         $request = new ProjectTranslateRequest($projectId);
 
         $result = $this->projectV1Api->translate($request);
 
         $this->assertGreaterThan(0, $result->getId());
         $this->assertEquals($projectId, $result->getId());
+
+        return $data;
     }
 
     /**
-     * @depends testItShouldCreateProject
+     * @depends testItShouldTriggerTranslateInSandbox
      */
-    public function testItShouldGetProjectData(int $projectId)
+    public function testItShouldGetProjectData(array $data)
     {
-        $response = $this->projectV1Api->get($projectId);
+        $projectId = $data['project_id'];
 
-        $actualItem   = $response->getItems()[1];
+        $projectGetResponse = $this->projectV1Api->get($projectId);
 
-        $this->assertSame($response->getDescription(), self::PROJECT_DESCRIPTION);
-        $this->assertEquals(self::DESCRIPTION_TRANSLATED, $actualItem->getDataValue('description'));
-        $this->assertEquals('new', $actualItem->getDataValue('status'));
-        $this->assertSame($this->metaData, $actualItem->getMeta());
+        $this->assertSame($projectGetResponse->getDescription(), self::PROJECT_DESCRIPTION);
+
+        $items = $projectGetResponse->getItems();
+        /** @var ItemData $item */
+        $item = $items[1];
+
+        $this->assertEquals((string)ProjectItemStatusEnum::FINISHED(), $item->getStatus());
+
+        return $data;
     }
 
     /**
-     * @depends testItShouldCreateItem
+     * @depends testItShouldTriggerTranslateInSandbox
      */
     public function testItShouldGetItemData(array $data)
     {
@@ -153,6 +165,10 @@ class ProjectV1ApiIntegrationTest extends TestCase
 
         $this->assertEquals(self::DESCRIPTION_TRANSLATED, $itemData->getDataValue('description'));
 
+        $this->assertEquals((string)ProjectItemStatusEnum::FINISHED(), $response->getItemStatus());
+
         $this->assertEquals($this->metaData, $itemData->getMeta());
+
+        return $data;
     }
 }
