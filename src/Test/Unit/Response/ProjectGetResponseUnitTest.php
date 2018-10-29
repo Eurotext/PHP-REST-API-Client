@@ -37,7 +37,7 @@ class ProjectGetResponseUnitTest extends TestCase
         /** @var ItemData $item */
         $item = $itemsResult[0];
         $this->assertEquals($description, $item->getDataValue('description'));
-        $this->assertEquals($status, $item->getDataValue('status'));
+        $this->assertEquals($status, $item->getStatus());
         $this->assertSame($metdaData, $item->getMeta());
 
     }

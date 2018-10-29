@@ -38,7 +38,7 @@ class ProjectStatusValidator implements ProjectStatusValidatorInterface
         $items = $response->getItems();
 
         foreach ($items as $key => $item) {
-            $itemStatus = $item->getDataValue('status');
+            $itemStatus = $item->getStatus();
 
             if ($itemStatus !== $expectedStatus) {
                 return false;
