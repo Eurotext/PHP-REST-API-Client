@@ -26,7 +26,7 @@ class ProjectStatusValidatorUnitTest extends TestCase
     {
         parent::setUp();
 
-        $this->projectApi = $this->getMockBuilder(ProjectV1ApiInterface::class)->getMock();
+        $this->projectApi = $this->createMock(ProjectV1ApiInterface::class);
 
         $this->sut = new ProjectStatusValidator($this->projectApi);
     }
@@ -35,7 +35,7 @@ class ProjectStatusValidatorUnitTest extends TestCase
     {
         $projectId = 1;
 
-        $project = $this->getMockBuilder(ProjectInterface::class)->getMock();
+        $project = $this->createMock(ProjectInterface::class);
         $project->expects($this->once())->method('getExtId')->willReturn($projectId);
         /** @var ProjectInterface $project */
 
@@ -55,7 +55,7 @@ class ProjectStatusValidatorUnitTest extends TestCase
     {
         $projectId = 1;
 
-        $project = $this->getMockBuilder(ProjectInterface::class)->getMock();
+        $project = $this->createMock(ProjectInterface::class);
         $project->expects($this->once())->method('getExtId')->willReturn($projectId);
         /** @var ProjectInterface $project */
 

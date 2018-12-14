@@ -34,10 +34,7 @@ class ProjectV1ApiTest extends TestCase
     {
         parent::setUp();
 
-        $this->client = $this->getMockBuilder(\GuzzleHttp\ClientInterface::class)
-                             ->disableOriginalConstructor()
-                             ->setMethods(['send'])
-                             ->getMockForAbstractClass();
+        $this->client = $this->createMock(\GuzzleHttp\ClientInterface::class);
 
         $this->api = new ProjectV1Api(null, $this->client);
     }
@@ -82,9 +79,7 @@ class ProjectV1ApiTest extends TestCase
 
         // SERIALIZER
         /** @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject $serializer */
-        $serializer = $this->getMockBuilder(SerializerInterface::class)
-                           ->setMethods(['deserialize'])
-                           ->getMockForAbstractClass();
+        $serializer = $this->createMock(SerializerInterface::class);
         $serializer->expects($this->once())->method('deserialize')->willThrowException(new \Exception());
 
         $api = new ProjectV1Api(null, $this->client, $serializer);
@@ -119,9 +114,7 @@ class ProjectV1ApiTest extends TestCase
 
         // SERIALIZER
         /** @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject $serializer */
-        $serializer = $this->getMockBuilder(SerializerInterface::class)
-                           ->setMethods(['deserialize'])
-                           ->getMockForAbstractClass();
+        $serializer = $this->createMock(SerializerInterface::class);
         $serializer->expects($this->once())->method('deserialize')->willReturn(new \StdClass());
 
         $api = new ProjectV1Api(null, $this->client, $serializer);

@@ -45,11 +45,9 @@ class ItemV1ApiGetUnitTest extends TestCase
     {
         parent::setUp();
 
-        $this->client = $this->getMockBuilder(ClientInterface::class)
-                             ->disableOriginalConstructor()
-                             ->getMockForAbstractClass();
+        $this->client = $this->createMock(ClientInterface::class);
 
-        $this->requestFactory = $this->getMockBuilder(RequestFactory::class)->getMock();
+        $this->requestFactory = $this->createMock(RequestFactory::class);
 
         $this->config = new Configuration();
 

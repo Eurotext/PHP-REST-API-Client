@@ -42,11 +42,7 @@ class ItemV1ApiTest extends TestCase
     {
         parent::setUp();
 
-        $this->client = $this->getMockBuilder(ClientInterface::class)
-                             ->disableOriginalConstructor()
-                             ->setMethods(['send'])
-                             ->getMockForAbstractClass();
-
+        $this->client = $this->createMock(ClientInterface::class);
         $this->config = $this->createMock(Configuration::class);
         $this->config->method('getHost')->willReturn(self::HOST);
         $this->requestFactory = $this->createMock(RequestFactory::class);
