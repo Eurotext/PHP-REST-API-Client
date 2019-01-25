@@ -35,13 +35,15 @@ class ProjectV1Api extends AbstractV1Api implements ProjectV1ApiInterface
     }
 
     /**
-     * @param int $projectId
+     * @param ProjectGetRequest $request
      *
      * @return ProjectGetResponse
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function get(int $projectId): ProjectGetResponse
+    public function get(ProjectGetRequest $request): ProjectGetResponse
     {
+    	$projectId = $request->getProjectId();
+    
         $httpPath = "/api/v1/project/$projectId.json";
 
         $response = $this->sendRequestAndHandleResponse(

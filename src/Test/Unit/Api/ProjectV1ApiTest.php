@@ -149,6 +149,8 @@ class ProjectV1ApiTest extends TestCase
     public function testItShouldGetProjectDetails()
     {
         $projectId = 27;
+		
+		$projectRequest = new ProjectGetRequest($projectId);
 
         $responseStatus  = 200;
         $responseHeaders = [];
@@ -158,7 +160,7 @@ class ProjectV1ApiTest extends TestCase
 
         $this->client->expects($this->once())->method('send')->willReturn($httpResponse);
 
-        $response = $this->api->get($projectId);
+        $response = $this->api->get($projectRequest);
 
         $this->assertSame('the project description', $response->getDescription());
         $this->assertArrayHasKey(1, $response->getItems());
