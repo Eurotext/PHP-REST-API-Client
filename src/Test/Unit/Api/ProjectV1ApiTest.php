@@ -12,6 +12,7 @@ use Eurotext\RestApiClient\Enum\ProjectStatusEnum;
 use Eurotext\RestApiClient\Enum\ProjectTypeEnum;
 use Eurotext\RestApiClient\Exception\DeserializationFailedException;
 use Eurotext\RestApiClient\Request\Data\ProjectData;
+use Eurotext\RestApiClient\Request\ProjectGetRequest;
 use Eurotext\RestApiClient\Request\ProjectPostRequest;
 use Eurotext\RestApiClient\Request\ProjectTransitionRequest;
 use Eurotext\RestApiClient\Request\ProjectTranslateRequest;
