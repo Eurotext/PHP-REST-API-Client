@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Eurotext\RestApiClient\Api;
 
+use Eurotext\RestApiClient\Request\ProjectGetRequest;
 use Eurotext\RestApiClient\Request\ProjectPostRequest;
 use Eurotext\RestApiClient\Request\ProjectTransitionRequest;
 use Eurotext\RestApiClient\Request\ProjectTranslateRequest;

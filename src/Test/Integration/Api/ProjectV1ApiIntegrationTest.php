@@ -18,6 +18,7 @@ use Eurotext\RestApiClient\Request\Data\Project\ItemData;
 use Eurotext\RestApiClient\Request\Data\ProjectData;
 use Eurotext\RestApiClient\Request\Project\ItemGetRequest;
 use Eurotext\RestApiClient\Request\Project\ItemPostRequest;
+use Eurotext\RestApiClient\Request\ProjectGetRequest;
 use Eurotext\RestApiClient\Request\ProjectPostRequest;
 use Eurotext\RestApiClient\Request\ProjectTransitionRequest;
 use Eurotext\RestApiClient\Request\ProjectTranslateRequest;

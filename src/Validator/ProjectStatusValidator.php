@@ -5,6 +5,7 @@ namespace Eurotext\RestApiClient\Validator;
 
 use Eurotext\RestApiClient\Api\ProjectV1ApiInterface;
 use Eurotext\RestApiClient\Enum\ProjectStatusEnum;
+use Eurotext\RestApiClient\Request\ProjectGetRequest;
 use Eurotext\TranslationManager\Api\Data\ProjectInterface;
 
 /**
@@ -33,7 +34,9 @@ class ProjectStatusValidator implements ProjectStatusValidatorInterface
         $projectId      = $project->getExtId();
         $expectedStatus = (string)$projectStatus;
 
-        $response = $this->projectV1Api->get($projectId);
+        $request = new ProjectGetRequest($projectId);
+
+        $response = $this->projectV1Api->get($request);
 
         $items = $response->getItems();
 
