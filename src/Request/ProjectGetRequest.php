@@ -6,9 +6,7 @@ declare(strict_types=1);
  * @see       PROJECT_LICENSE.txt
  */
 
-namespace Eurotext\RestApiClient\Request\Project;
-
-use Eurotext\RestApiClient\Request\RequestInterface;
+namespace Eurotext\RestApiClient\Request;
 
 class ProjectGetRequest implements RequestInterface
 {
@@ -20,7 +18,7 @@ class ProjectGetRequest implements RequestInterface
     public function __construct(
         int $projectId
     ) {
-        $this->projectId  = $projectId;
+        $this->projectId = $projectId;
     }
 
     public function getProjectId(): int
