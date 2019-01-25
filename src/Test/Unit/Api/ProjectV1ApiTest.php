@@ -196,7 +196,7 @@ class ProjectV1ApiTest extends TestCase
 
         $this->client->expects($this->once())->method('send')->willReturn($brokenResponse);
 
-        $this->api->get(27);
+        $this->api->get(new ProjectGetRequest(27));
     }
 
     public function testItShouldThrowAnExceptionOnRequestError()
@@ -205,7 +205,7 @@ class ProjectV1ApiTest extends TestCase
 
         $this->client->expects($this->once())->method('send')->willThrowException(new HttpTestException());
 
-        $this->api->get(27);
+        $this->api->get(new ProjectGetRequest(27));
     }
 
 }
