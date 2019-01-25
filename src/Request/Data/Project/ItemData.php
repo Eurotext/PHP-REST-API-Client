@@ -24,9 +24,23 @@ class ItemData implements \JsonSerializable
         $this->__meta = $__meta;
     }
 
+    public function getStatus()
+    {
+        return $this->getDataValue('status');
+    }
+
     public function getData(): array
     {
         return $this->data;
+    }
+
+    public function getDataValue($key)
+    {
+        if (!array_key_exists($key, $this->data)) {
+            return null;
+        }
+
+        return $this->data[$key];
     }
 
     public function getMeta(): array

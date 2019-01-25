@@ -17,10 +17,7 @@ class LanguagesV1ApiTest extends TestCase
 
     protected function setUp()
     {
-        $this->client = $this->getMockBuilder(\GuzzleHttp\ClientInterface::class)
-                             ->disableOriginalConstructor()
-                             ->setMethods(['send'])
-                             ->getMockForAbstractClass();
+        $this->client = $this->createMock(\GuzzleHttp\ClientInterface::class);
 
         $this->api = new LanguagesV1Api(null, $this->client);
     }
@@ -42,13 +39,13 @@ class LanguagesV1ApiTest extends TestCase
         $this->assertCount(6, $response->getLanguages());
     }
 
-    public function testThrowsExceptionOnDeserializeError()
+    public function _testThrowsExceptionOnDeserializeError()
     {
-
+        // @todo implement
     }
 
-    public function testThrowsExceptionOnRequestError()
+    public function _testThrowsExceptionOnRequestError()
     {
-
+        // @todo implement
     }
 }

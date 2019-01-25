@@ -11,7 +11,7 @@ namespace Eurotext\RestApiClient\Request;
 use Eurotext\RestApiClient\Enum\ProjectTypeEnum;
 use Eurotext\RestApiClient\Request\Data\ProjectData;
 
-class ProjectDataRequest implements RequestInterface
+class ProjectPostRequest implements RequestInterface
 {
     /** @var string */
     private $name;

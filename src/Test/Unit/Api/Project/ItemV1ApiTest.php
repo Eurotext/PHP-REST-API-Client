@@ -12,7 +12,7 @@ use Eurotext\RestApiClient\Configuration;
 use Eurotext\RestApiClient\Exception\DeserializationFailedException;
 use Eurotext\RestApiClient\Http\RequestFactory;
 use Eurotext\RestApiClient\Request\Data\Project\ItemData;
-use Eurotext\RestApiClient\Request\Project\ItemDataRequest;
+use Eurotext\RestApiClient\Request\Project\ItemPostRequest;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use PHPUnit\Framework\TestCase;
@@ -42,11 +42,7 @@ class ItemV1ApiTest extends TestCase
     {
         parent::setUp();
 
-        $this->client = $this->getMockBuilder(ClientInterface::class)
-                             ->disableOriginalConstructor()
-                             ->setMethods(['send'])
-                             ->getMockForAbstractClass();
-
+        $this->client = $this->createMock(ClientInterface::class);
         $this->config = $this->createMock(Configuration::class);
         $this->config->method('getHost')->willReturn(self::HOST);
         $this->requestFactory = $this->createMock(RequestFactory::class);
@@ -116,9 +112,9 @@ class ItemV1ApiTest extends TestCase
     }
 
     /**
-     * @return ItemDataRequest
+     * @return ItemPostRequest
      */
-    private function createItemRequest(): ItemDataRequest
+    private function createItemRequest(): ItemPostRequest
     {
         $source       = 'en_US';
         $target       = 'de_DE';
@@ -135,7 +131,7 @@ class ItemV1ApiTest extends TestCase
             ]
         );
 
-        $itemRequest = new ItemDataRequest(self::PROJECT_ID, $source, $target, $textType, $systemModule, $itemData);
+        $itemRequest = new ItemPostRequest(self::PROJECT_ID, $source, $target, $textType, $systemModule, $itemData);
 
         return $itemRequest;
     }

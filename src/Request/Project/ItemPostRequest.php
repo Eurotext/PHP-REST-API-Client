@@ -11,7 +11,7 @@ namespace Eurotext\RestApiClient\Request\Project;
 use Eurotext\RestApiClient\Request\Data\Project\ItemData;
 use Eurotext\RestApiClient\Request\RequestInterface;
 
-class ItemDataRequest implements RequestInterface
+class ItemPostRequest implements RequestInterface
 {
     /** @var string */
     private $source;

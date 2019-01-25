@@ -8,10 +8,15 @@ declare(strict_types=1);
 
 namespace Eurotext\RestApiClient\Api;
 
+use Eurotext\RestApiClient\Enum\ProjectStatusEnum;
 use Eurotext\RestApiClient\Enum\ProjectTypeEnum;
 use Eurotext\RestApiClient\Exception\DeserializationFailedException;
 use Eurotext\RestApiClient\Request\Data\ProjectData;
-use Eurotext\RestApiClient\Request\ProjectDataRequest;
+use Eurotext\RestApiClient\Request\ProjectGetRequest;
+use Eurotext\RestApiClient\Request\ProjectPostRequest;
+use Eurotext\RestApiClient\Request\ProjectTransitionRequest;
+use Eurotext\RestApiClient\Request\ProjectTranslateRequest;
+use Eurotext\RestApiClient\Response\ProjectTransitionResponse;
 use GuzzleHttp\Exception\GuzzleException;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
@@ -30,23 +35,20 @@ class ProjectV1ApiTest extends TestCase
     {
         parent::setUp();
 
-        $this->client = $this->getMockBuilder(\GuzzleHttp\ClientInterface::class)
-                             ->disableOriginalConstructor()
-                             ->setMethods(['send'])
-                             ->getMockForAbstractClass();
+        $this->client = $this->createMock(\GuzzleHttp\ClientInterface::class);
 
         $this->api = new ProjectV1Api(null, $this->client);
     }
 
     /**
-     * @throws \Eurotext\RestApiClient\Exception\DeserializationFailedException
-     * @throws \Eurotext\RestApiClient\Exception\ApiClientException
+     * @throws DeserializationFailedException
+     * @throws GuzzleException
      */
     public function testItShouldSendProjectPost()
     {
         $projectData = new ProjectData('Unit Test');
 
-        $request = new ProjectDataRequest('', $projectData, ProjectTypeEnum::QUOTE());
+        $request = new ProjectPostRequest('', $projectData, ProjectTypeEnum::QUOTE());
 
         $responseStatus  = 200;
         $responseHeaders = [];
@@ -62,11 +64,11 @@ class ProjectV1ApiTest extends TestCase
     }
 
     /**
-     * @throws ApiClientException
+     * @throws GuzzleException
      */
     public function testItShouldCaptureExceptionsDuringResponseDeserialization()
     {
-        $request = new ProjectDataRequest('', new ProjectData(''));
+        $request = new ProjectPostRequest('', new ProjectData(''));
 
         $responseStatus  = 200;
         $responseHeaders = [];
@@ -78,9 +80,7 @@ class ProjectV1ApiTest extends TestCase
 
         // SERIALIZER
         /** @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject $serializer */
-        $serializer = $this->getMockBuilder(SerializerInterface::class)
-                           ->setMethods(['deserialize'])
-                           ->getMockForAbstractClass();
+        $serializer = $this->createMock(SerializerInterface::class);
         $serializer->expects($this->once())->method('deserialize')->willThrowException(new \Exception());
 
         $api = new ProjectV1Api(null, $this->client, $serializer);
@@ -98,12 +98,12 @@ class ProjectV1ApiTest extends TestCase
     }
 
     /**
-     * @throws ApiClientException
      * @throws DeserializationFailedException
+     * @throws GuzzleException
      */
     public function testItShouldInitializeEmptyResponseObject()
     {
-        $request = new ProjectDataRequest('', new ProjectData(''));
+        $request = new ProjectPostRequest('', new ProjectData(''));
 
         $responseStatus  = 200;
         $responseHeaders = [];
@@ -115,9 +115,7 @@ class ProjectV1ApiTest extends TestCase
 
         // SERIALIZER
         /** @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject $serializer */
-        $serializer = $this->getMockBuilder(SerializerInterface::class)
-                           ->setMethods(['deserialize'])
-                           ->getMockForAbstractClass();
+        $serializer = $this->createMock(SerializerInterface::class);
         $serializer->expects($this->once())->method('deserialize')->willReturn(new \StdClass());
 
         $api = new ProjectV1Api(null, $this->client, $serializer);
@@ -125,9 +123,35 @@ class ProjectV1ApiTest extends TestCase
         $api->post($request);
     }
 
+    /**
+     * @throws GuzzleException
+     */
+    public function testItShouldTransitionProject()
+    {
+        $projectId = 27;
+
+        $request = new ProjectTransitionRequest($projectId, ProjectStatusEnum::NEW());
+
+        $responseStatus  = 204;
+        $responseHeaders = [];
+        $responseBody    = '';
+
+        $httpResponse = new \GuzzleHttp\Psr7\Response($responseStatus, $responseHeaders, $responseBody);
+
+        $this->client->expects($this->once())->method('send')->willReturn($httpResponse);
+
+        $response = $this->api->transition($request);
+
+        $this->assertInstanceOf(ProjectTransitionResponse::class, $response);
+
+        $this->assertEquals($httpResponse, $response->getHttpResponse());
+    }
+
     public function testItShouldGetProjectDetails()
     {
         $projectId = 27;
+		
+		$projectRequest = new ProjectGetRequest($projectId);
 
         $responseStatus  = 200;
         $responseHeaders = [];
@@ -137,13 +161,30 @@ class ProjectV1ApiTest extends TestCase
 
         $this->client->expects($this->once())->method('send')->willReturn($httpResponse);
 
-        $response = $this->api->get($projectId);
+        $response = $this->api->get($projectRequest);
 
         $this->assertSame('the project description', $response->getDescription());
         $this->assertArrayHasKey(1, $response->getItems());
         $this->assertArrayHasKey(2, $response->getItems());
         $this->assertArrayHasKey(3, $response->getItems());
         $this->assertSame([], $response->getFiles());
+    }
+
+    public function testItShouldSendTranslateRequest()
+    {
+        $projectId = 27;
+
+        $responseStatus  = 200;
+        $responseHeaders = [];
+        $responseBody    = sprintf('{"id":%d}', $projectId);
+
+        $httpResponse = new \GuzzleHttp\Psr7\Response($responseStatus, $responseHeaders, $responseBody);
+
+        $this->client->expects($this->once())->method('send')->willReturn($httpResponse);
+
+        $response = $this->api->translate(new ProjectTranslateRequest($projectId));
+
+        $this->assertEquals($projectId, $response->getId());
     }
 
     public function testItShouldThrowExceptionOnDeserializationError()
@@ -155,7 +196,7 @@ class ProjectV1ApiTest extends TestCase
 
         $this->client->expects($this->once())->method('send')->willReturn($brokenResponse);
 
-        $this->api->get(27);
+        $this->api->get(new ProjectGetRequest(27));
     }
 
     public function testItShouldThrowAnExceptionOnRequestError()
@@ -164,7 +205,7 @@ class ProjectV1ApiTest extends TestCase
 
         $this->client->expects($this->once())->method('send')->willThrowException(new HttpTestException());
 
-        $this->api->get(27);
+        $this->api->get(new ProjectGetRequest(27));
     }
 
 }

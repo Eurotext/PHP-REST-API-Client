@@ -12,7 +12,6 @@ use Eurotext\RestApiClient\Configuration;
 use Eurotext\RestApiClient\ConfigurationInterface;
 use Eurotext\RestApiClient\Exception\DeserializationFailedException;
 use Eurotext\RestApiClient\Http\RequestFactory;
-use Eurotext\RestApiClient\Response\ProjectPostResponse;
 use Eurotext\RestApiClient\Response\ResponseInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
@@ -72,15 +71,13 @@ abstract class AbstractV1Api
         $httpResponse = $this->client->send($httpRequest, $httpOptions);
 
         // Handle Response: Deserzialize Response JSON to PHP Object
+        $response = null;
         try {
             $responseContent = $httpResponse->getBody()->getContents();
 
-            /** @var ProjectPostResponse $response */
-            $response = $this->serializer->deserialize(
-                $responseContent,
-                $responseClass,
-                'json'
-            );
+            if (!empty($responseContent)) {
+                $response = $this->serializer->deserialize($responseContent, $responseClass, 'json');
+            }
         } catch (\Exception $e) {
             throw new DeserializationFailedException(
                 $httpRequest,
@@ -98,12 +95,13 @@ abstract class AbstractV1Api
         $response->setHttpRequest($httpRequest);
         $response->setHttpResponse($httpResponse);
 
+        /** @var ResponseInterface $response */
         return $response;
     }
 
     protected function createHttpPostRequest(string $path, array $headers = [], string $httpBody = null): Request
     {
-        $uri = $this->config->getHost() . $path;
+        $uri = rtrim($this->config->getHost(), '/') . $path;
 
         $httpHeaders = [
             'Content-Type' => 'application/json',
@@ -132,6 +130,23 @@ abstract class AbstractV1Api
         }
 
         return $this->requestFactory->createGetRequest($uri, $httpHeaders);
+    }
+
+    protected function createHttpPatchRequest(string $path, array $headers = [], string $httpBody = null): Request
+    {
+        $uri = $this->config->getHost() . $path;
+
+        $httpHeaders = [
+            'Content-Type' => 'application/json',
+            'User-Agent'   => $this->config->getUserAgent(),
+            'apikey'       => $this->config->getApiKey(),
+        ];
+
+        if (!empty($headers)) {
+            $httpHeaders = array_merge($httpHeaders, $headers);
+        }
+
+        return $this->requestFactory->createPatchRequest($uri, $httpHeaders, $httpBody);
     }
 
     /**
