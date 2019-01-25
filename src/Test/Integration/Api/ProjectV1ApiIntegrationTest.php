@@ -137,8 +137,10 @@ class ProjectV1ApiIntegrationTest extends TestCase
     public function testItShouldGetProjectData(array $data)
     {
         $projectId = $data['project_id'];
+		
+		$request = new ProjectGetRequest($projectId);
 
-        $projectGetResponse = $this->projectV1Api->get($projectId);
+        $projectGetResponse = $this->projectV1Api->get($request);
 
         $this->assertSame($projectGetResponse->getDescription(), self::PROJECT_DESCRIPTION);
 
