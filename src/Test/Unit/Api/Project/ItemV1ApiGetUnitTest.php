@@ -41,7 +41,7 @@ class ItemV1ApiGetUnitTest extends TestCase
 
     const BASE_URL = 'https://sandbox.api.eurotext.de/api/v1/project/%d/item/%d.json';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

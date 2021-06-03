@@ -13,7 +13,7 @@ class LanguagesGetResponseTest extends TestCase
     /** @var LanguagesGetResponse */
     private $response;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $languages      = self::LANGUAGES;
         $this->response = new LanguagesGetResponse($languages);

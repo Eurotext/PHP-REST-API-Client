@@ -22,7 +22,7 @@ class ProjectStatusValidatorUnitTest extends TestCase
     /** @var ProjectV1ApiInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $projectApi;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

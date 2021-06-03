@@ -38,7 +38,7 @@ class ItemV1ApiTest extends TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|Configuration */
     private $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
