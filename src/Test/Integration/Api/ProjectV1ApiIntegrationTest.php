@@ -61,7 +61,9 @@ class ProjectV1ApiIntegrationTest extends TestCase
     {
         $projectData = new ProjectData(self::PROJECT_DESCRIPTION);
 
-        $request = new ProjectPostRequest('', $projectData, ProjectTypeEnum::QUOTE());
+        $request = new ProjectPostRequest(
+            'ProjectV1ApiIntegrationTest-' . time(), $projectData, ProjectTypeEnum::QUOTE()
+        );
 
         $response = $this->projectV1Api->post($request);
 
