@@ -27,9 +27,9 @@ use PHPUnit\Framework\TestCase;
 
 class ProjectV1ApiIntegrationTest extends TestCase
 {
-    const PROJECT_DESCRIPTION    = 'Integration Test';
+    const PROJECT_DESCRIPTION = 'Integration Test';
     const DESCRIPTION_TRANSLATED = '!em etalsnart esaelP';
-    const DESCRIPTION            = 'Please translate me!';
+    const DESCRIPTION = 'Please translate me!';
 
     /** @var ProjectV1Api */
     private $projectV1Api;
@@ -38,18 +38,18 @@ class ProjectV1ApiIntegrationTest extends TestCase
     private $projectItemV1Api;
 
     private $metaData = [
-        'item_id'   => 27,
+        'item_id' => 27,
         'more_meta' => 'eurotext are the best',
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $config = new Configuration();
         $config->setApiKey(\constant('EUROTEXT_API_KEY'));
 
-        $this->projectV1Api     = new ProjectV1Api($config);
+        $this->projectV1Api = new ProjectV1Api($config);
         $this->projectItemV1Api = new ItemV1Api($config);
     }
 
@@ -61,7 +61,9 @@ class ProjectV1ApiIntegrationTest extends TestCase
     {
         $projectData = new ProjectData(self::PROJECT_DESCRIPTION);
 
-        $request = new ProjectPostRequest('', $projectData, ProjectTypeEnum::QUOTE());
+        $request = new ProjectPostRequest(
+            'ProjectV1ApiIntegrationTest-' . time(), $projectData, ProjectTypeEnum::QUOTE()
+        );
 
         $response = $this->projectV1Api->post($request);
 
@@ -138,8 +140,8 @@ class ProjectV1ApiIntegrationTest extends TestCase
     public function testItShouldGetProjectData(array $data)
     {
         $projectId = $data['project_id'];
-		
-		$request = new ProjectGetRequest($projectId);
+
+        $request = new ProjectGetRequest($projectId);
 
         $projectGetResponse = $this->projectV1Api->get($request);
 
@@ -160,9 +162,9 @@ class ProjectV1ApiIntegrationTest extends TestCase
     public function testItShouldGetItemData(array $data)
     {
         $projectId = $data['project_id'];
-        $itemId    = $data['item_id'];
-        $request   = new ItemGetRequest($projectId, $itemId);
-        $response  = $this->projectItemV1Api->get($request);
+        $itemId = $data['item_id'];
+        $request = new ItemGetRequest($projectId, $itemId);
+        $response = $this->projectItemV1Api->get($request);
 
         $itemData = $response->getItemData();
 

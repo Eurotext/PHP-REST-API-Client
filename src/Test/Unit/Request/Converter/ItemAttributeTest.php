@@ -10,7 +10,7 @@ class ItemAttributeTest extends TestCase
     /** @var ItemAttribute */
     private $converter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->converter = new ItemAttribute();
     }

@@ -15,7 +15,7 @@ class LanguagesV1ApiTest extends TestCase
     /** @var Client|\PHPUnit_Framework_MockObject_MockObject */
     private $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(\GuzzleHttp\ClientInterface::class);
 

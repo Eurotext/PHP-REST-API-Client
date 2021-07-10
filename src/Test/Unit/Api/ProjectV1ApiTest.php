@@ -31,7 +31,7 @@ class ProjectV1ApiTest extends TestCase
     /** @var \GuzzleHttp\ClientInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -50,9 +50,9 @@ class ProjectV1ApiTest extends TestCase
 
         $request = new ProjectPostRequest('', $projectData, ProjectTypeEnum::QUOTE());
 
-        $responseStatus  = 200;
+        $responseStatus = 200;
         $responseHeaders = [];
-        $responseBody    = file_get_contents(__DIR__ . '/_files/project-post-response.json');
+        $responseBody = file_get_contents(__DIR__ . '/_files/project-post-response.json');
 
         $httpResponse = new \GuzzleHttp\Psr7\Response($responseStatus, $responseHeaders, $responseBody);
 
@@ -70,9 +70,9 @@ class ProjectV1ApiTest extends TestCase
     {
         $request = new ProjectPostRequest('', new ProjectData(''));
 
-        $responseStatus  = 200;
+        $responseStatus = 200;
         $responseHeaders = [];
-        $responseBody    = file_get_contents(__DIR__ . '/_files/project-post-response.json');
+        $responseBody = file_get_contents(__DIR__ . '/_files/project-post-response.json');
 
         $httpResponse = new \GuzzleHttp\Psr7\Response($responseStatus, $responseHeaders, $responseBody);
 
@@ -105,9 +105,9 @@ class ProjectV1ApiTest extends TestCase
     {
         $request = new ProjectPostRequest('', new ProjectData(''));
 
-        $responseStatus  = 200;
+        $responseStatus = 200;
         $responseHeaders = [];
-        $responseBody    = file_get_contents(__DIR__ . '/_files/project-post-response.json');
+        $responseBody = file_get_contents(__DIR__ . '/_files/project-post-response.json');
 
         $httpResponse = new \GuzzleHttp\Psr7\Response($responseStatus, $responseHeaders, $responseBody);
 
@@ -132,9 +132,9 @@ class ProjectV1ApiTest extends TestCase
 
         $request = new ProjectTransitionRequest($projectId, ProjectStatusEnum::NEW());
 
-        $responseStatus  = 204;
+        $responseStatus = 204;
         $responseHeaders = [];
-        $responseBody    = '';
+        $responseBody = '';
 
         $httpResponse = new \GuzzleHttp\Psr7\Response($responseStatus, $responseHeaders, $responseBody);
 
@@ -150,12 +150,12 @@ class ProjectV1ApiTest extends TestCase
     public function testItShouldGetProjectDetails()
     {
         $projectId = 27;
-		
-		$projectRequest = new ProjectGetRequest($projectId);
 
-        $responseStatus  = 200;
+        $projectRequest = new ProjectGetRequest($projectId);
+
+        $responseStatus = 200;
         $responseHeaders = [];
-        $responseBody    = file_get_contents(__DIR__ . '/_files/project-get-response.json');
+        $responseBody = file_get_contents(__DIR__ . '/_files/project-get-response.json');
 
         $httpResponse = new \GuzzleHttp\Psr7\Response($responseStatus, $responseHeaders, $responseBody);
 
@@ -174,9 +174,9 @@ class ProjectV1ApiTest extends TestCase
     {
         $projectId = 27;
 
-        $responseStatus  = 200;
+        $responseStatus = 200;
         $responseHeaders = [];
-        $responseBody    = sprintf('{"id":%d}', $projectId);
+        $responseBody = sprintf('{"id":%d}', $projectId);
 
         $httpResponse = new \GuzzleHttp\Psr7\Response($responseStatus, $responseHeaders, $responseBody);
 
