@@ -118,7 +118,7 @@ abstract class AbstractV1Api
 
     protected function createHttpGetRequest(string $path, array $headers = []): Request
     {
-        $uri = $this->config->getHost() . $path;
+        $uri = rtrim($this->config->getHost(), '/') . $path;
 
         $httpHeaders = [
             'User-Agent' => $this->config->getUserAgent(),
@@ -134,7 +134,7 @@ abstract class AbstractV1Api
 
     protected function createHttpPatchRequest(string $path, array $headers = [], string $httpBody = null): Request
     {
-        $uri = $this->config->getHost() . $path;
+        $uri = rtrim($this->config->getHost(), '/') . $path;
 
         $httpHeaders = [
             'Content-Type' => 'application/json',
